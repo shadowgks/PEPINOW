@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PlantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +20,14 @@ use App\Http\Controllers\AuthController;
 //     return $request->user();
 // });
 
-//Route Authentification
+//Authentification
 Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
-    Route::get('me', 'me');
+    Route::post('/login', 'login');
+    Route::post('/register', 'register');
+    Route::post('/logout', 'logout');
+    Route::post('/refresh', 'refresh');
+    Route::get('/me', 'me');
 });
+
+//Plant
+Route::apiResource('/plant',PlantController::class);
