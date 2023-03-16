@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PlantRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Plant;
 
 class PlantController extends Controller
@@ -43,13 +44,14 @@ class PlantController extends Controller
         if ($validated->fails()) {
             return response()->json($validated->errors(), 400);
         }
+        $user = Auth::user(); //current user
         $plant = Plant::create([
             'name' => $request->name,
             'picture' => $request->picture,
             'price' => $request->price,
             'description' => $request->description,
             'categorie_id' => $request->categorie_id,
-            // 'user_id ' => $request->categorie_id,
+            'user_id ' => $user->id
         ]);
         if (is_null($plant)) {
             return response()->json('Somthing not correct for this create role please try again!', 401);
