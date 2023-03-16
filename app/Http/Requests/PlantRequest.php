@@ -26,8 +26,10 @@ class PlantRequest extends FormRequest
         return [
             'name' => 'required',
             'picture' => 'required',
-            'price'=>'required|min:0',
-            'categorie_id' => 'required|exists:categories', 'id',
+            'price'=>'required',
+            'description'=>'required',
+            'categorie_id' => 'exists:App\Models\Categorie,id',
+            'user_id' => 'exists:App\Models\User,id',
         ];
     }
 
