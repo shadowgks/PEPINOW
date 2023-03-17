@@ -15,11 +15,11 @@ class PlantController extends Controller
      */
     public function index()
     {
-        // $plant = Plant::get();
-        // if (is_null($plant)) {
-        //     return $this->returnError('E030', 'Not Found Any Plants!');
-        // }
-        // return $this->returnData("plant", $plant, "Find Plants", "");
+        $plant = Plant::get();
+        if (is_null($plant)) {
+            return response()->json('Not found Any data!', 404);
+        }
+        return response()->json($plant, 200);
     }
 
     /**
@@ -58,9 +58,13 @@ class PlantController extends Controller
      * @param  \App\Models\Plant  $plant
      * @return \Illuminate\Http\Response
      */
-    public function show(Plant $plant)
+    public function show($id)
     {
-        //
+        $plate = Plant::find($id);
+        if (is_null($plate)) {
+            return response()->json('Plant not found!', 404);
+        }
+        return response()->json($plate, 200);
     }
 
     /**
@@ -69,7 +73,7 @@ class PlantController extends Controller
      * @param  \App\Models\Plant  $plant
      * @return \Illuminate\Http\Response
      */
-    public function edit(Plant $plant)
+    public function edit($id)
     {
         //
     }
@@ -81,9 +85,14 @@ class PlantController extends Controller
      * @param  \App\Models\Plant  $plant
      * @return \Illuminate\Http\Response
      */
-    public function update(PlantRequest $request, Plant $plant)
+    public function update(PlantRequest $request, $id)
     {
-        //
+        $plant = Plant::find($id);
+        if (is_null($plant)) {
+            return response()->json('Somthing not correct for this update plant please try again!', 404);
+        }
+        $plant->update($request->all());
+        return response()->json($plant, 200);
     }
 
     /**
@@ -92,8 +101,13 @@ class PlantController extends Controller
      * @param  \App\Models\Plant  $plant
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Plant $plant)
+    public function destroy($id)
     {
-        //
+        $plant = Plant::find($id);
+        if (is_null($plant)) {
+            return response()->json('Not found this plant!', 404);
+        }
+        $plant->delete();
+        return response()->json(null, 204);
     }
 }
