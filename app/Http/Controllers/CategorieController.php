@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategorieRequest;
 use App\Models\Categorie;
-use Illuminate\Http\Request;
 
 class CategorieController extends Controller
 {
@@ -14,7 +14,11 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        //
+        $categorie = Categorie::get();
+        if (is_null($categorie)) {
+            return response()->json('Not found Any data!', 404);
+        }
+        return response()->json($categorie, 200);
     }
 
     /**
@@ -33,9 +37,13 @@ class CategorieController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategorieRequest $request)
     {
-        //
+        $create = Categorie::create($request->all());
+        if (is_null($create)) {
+            return response()->json('Somthing not correct for this create country please try again!', 404);
+        }
+        return response()->json($create, 201);
     }
 
     /**
@@ -44,9 +52,13 @@ class CategorieController extends Controller
      * @param  \App\Models\Categorie  $categorie
      * @return \Illuminate\Http\Response
      */
-    public function show(Categorie $categorie)
+    public function show($id)
     {
-        //
+        $categorie = Categorie::find($id);
+        if (is_null($categorie)) {
+            return response()->json('Categorie not found!', 404);
+        }
+        return response()->json($categorie, 200);
     }
 
     /**
@@ -67,9 +79,14 @@ class CategorieController extends Controller
      * @param  \App\Models\Categorie  $categorie
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Categorie $categorie)
+    public function update(CategorieRequest $request, $id)
     {
-        //
+        $categorie = Categorie::find($id);
+        if (is_null($categorie)) {
+            return response()->json('Somthing not correct for this update categorie please try again!', 404);
+        }
+        $categorie->update($request->all());
+        return response()->json($categorie, 200);
     }
 
     /**
@@ -78,8 +95,13 @@ class CategorieController extends Controller
      * @param  \App\Models\Categorie  $categorie
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Categorie $categorie)
+    public function destroy($id)
     {
-        //
+        $categorie = Categorie::find($id);
+        if (is_null($categorie)) {
+            return response()->json('Not found this categorie!', 404);
+        }
+        $categorie->delete();
+        return response()->json(null, 204);
     }
 }

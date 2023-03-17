@@ -40,11 +40,7 @@ class PlantController extends Controller
      */
     public function store(PlantRequest $request)
     {
-        $validated = $request->validated();
-        if (!$validated) {
-            return response()->json($validated->errors(), 400);
-        }
-        $id = optional(Auth::user())->id; //current user
+        $id = Auth::user()->id; //current user
         $plant = Plant::create([
             'name' => $request->name,
             'picture' => $request->picture,
@@ -53,10 +49,7 @@ class PlantController extends Controller
             'categorie_id' => $request->categorie_id,
             'user_id' => $id
         ]);
-        if (is_null($plant)) {
-            return response()->json('Somthing not correct for this create role please try again!', 401);
-        }
-        response()->json('Created Success', 204);
+        return response()->json('Created Success', 201);
     }
 
     /**

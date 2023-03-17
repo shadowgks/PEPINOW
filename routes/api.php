@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\PlantController;
 
 /*
@@ -29,5 +30,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/me', 'me');
 });
 
-//Plant
+//Plant && Categorie
 Route::apiResource('/plant',PlantController::class);
+Route::apiResource('/categorie',CategorieController::class);

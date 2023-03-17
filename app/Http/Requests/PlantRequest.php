@@ -28,7 +28,7 @@ class PlantRequest extends FormRequest
             'picture' => 'required',
             'price'=>'required',
             'description'=>'required',
-            'categorie_id' => 'exists:App\Models\Categorie,id',
+            'categorie_id' => 'required|exists:App\Models\Categorie,id',
             'user_id' => 'exists:App\Models\User,id',
         ];
     }
