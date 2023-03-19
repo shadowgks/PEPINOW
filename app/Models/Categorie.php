@@ -11,4 +11,8 @@ class Categorie extends Model
     protected $fillable = [
         'name'
     ];
+
+    function plants(){
+        return $this->belongsToMany(Plant::class);
+    }
 }

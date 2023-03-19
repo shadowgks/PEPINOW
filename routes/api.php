@@ -32,4 +32,7 @@ Route::controller(AuthController::class)->group(function () {
 
 //Plant && Categorie
 Route::apiResource('/plant',PlantController::class);
+Route::post('/plant/{plant}', [PlantController::class, 'addCategories']);
+
 Route::apiResource('/categorie',CategorieController::class);
+

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoriePlantRequest;
 use App\Http\Requests\PlantRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Plant;
+use Illuminate\Http\Request;
 
 class PlantController extends Controller
 {
@@ -15,7 +17,7 @@ class PlantController extends Controller
      */
     public function index()
     {
-        $plant = Plant::get();
+        $plant = Plant::all();
         if (is_null($plant)) {
             return response()->json('Not found Any data!', 404);
         }
@@ -32,6 +34,14 @@ class PlantController extends Controller
         //
     }
 
+    public function addCategories(CategoriePlantRequest $request, $id){
+        // dd($plant);
+        $plant = Plant::find($id);
+        $plant->categories()
+        ->syncWithoutDetaching($request->categorie_id);
+        return 'Created Multiple Categories';
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -46,10 +56,14 @@ class PlantController extends Controller
             'picture' => $request->picture,
             'price' => $request->price,
             'description' => $request->description,
-            'categorie_id' => $request->categorie_id,
             'user_id' => $id
         ]);
         return response()->json('Created Success', 201);
+    }
+
+    public function addCategorie(Request $request, Plant $plant)
+    {
+        $plant->categories()->attach($request->categorie);
     }
 
     /**
@@ -60,11 +74,13 @@ class PlantController extends Controller
      */
     public function show($id)
     {
-        $plate = Plant::find($id);
-        if (is_null($plate)) {
-            return response()->json('Plant not found!', 404);
-        }
-        return response()->json($plate, 200);
+        $plant = Plant::find($id);
+        return $plant->load('categories');
+        // $plate = Plant::find($id);
+        // if (is_null($plate)) {
+        //     return response()->json('Plant not found!', 404);
+        // }
+        // return response()->json($plate, 200);
     }
 
     /**

@@ -11,4 +11,10 @@ class Plant extends Model
     protected $fillable = [
         'name','picture','price','description','categorie_id','user_id'
     ];
+
+    function categories(){
+        return $this->belongsToMany(Categorie::class)
+        ->withTimestamps()
+        ->as('plant_categorie');
+    }
 }

@@ -13,17 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('plants', function (Blueprint $table) {
+        Schema::create('categorie_plant', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('picture');
-            $table->double('price');
-            $table->text('description');
-            //forignkey user
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->foreignId('plant_id')
+            ->constrained('plants')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+            $table->foreignId('categorie_id')
+            ->constrained('categories')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('plants');
+        Schema::dropIfExists('categorie_plant');
     }
 };
