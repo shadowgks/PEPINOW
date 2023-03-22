@@ -28,6 +28,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/logout', 'logout');
     Route::post('/refresh', 'refresh');
     Route::get('/me', 'me');
+    Route::post('/forgotPassword', 'forgotPassword');
+    Route::post('/resetPassword', 'resetPassword')->name('password.reset');
 });
 
 //Plant && Categorie
