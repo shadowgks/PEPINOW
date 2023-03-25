@@ -16,9 +16,9 @@ class CategorieController extends Controller
     {
         $categorie = Categorie::get();
         if (is_null($categorie)) {
-            return response()->json('Not found Any data!', 404);
+            return response()->json(['status'=>false, 'msg'=>'Not found Any data!']);
         }
-        return response()->json($categorie, 200);
+        return response()->json(['status'=>true, 'data'=>$categorie]);
     }
 
     /**
@@ -37,9 +37,9 @@ class CategorieController extends Controller
     {
         $create = Categorie::create($request->all());
         if (is_null($create)) {
-            return response()->json('Somthing not correct for this create country please try again!', 404);
+            return response()->json(['status'=>false, 'msg'=>'Somthing not correct for this create country please try again!']);
         }
-        return response()->json($create, 201);
+        return response()->json(['status'=>true, 'data'=>$create]);
     }
 
     /**
@@ -52,9 +52,9 @@ class CategorieController extends Controller
     {
         $categorie = Categorie::find($id);
         if (is_null($categorie)) {
-            return response()->json('Categorie not found!', 404);
+            return response()->json(['status'=>false, 'msg'=>'This Categorie not found!']);
         }
-        return response()->json($categorie, 200);
+        return response()->json(['status'=>true, 'data'=>$categorie]);
     }
 
     /**
@@ -74,10 +74,10 @@ class CategorieController extends Controller
     {
         $categorie = Categorie::find($id);
         if (is_null($categorie)) {
-            return response()->json('Somthing not correct for this update categorie please try again!', 404);
+            return response()->json(['status'=>false, 'msg'=>'This Categorie not found!']);
         }
         $categorie->update($request->all());
-        return response()->json($categorie, 200);
+        return response()->json(['status'=>true, 'data'=>$categorie]);
     }
 
     /**
@@ -90,9 +90,9 @@ class CategorieController extends Controller
     {
         $categorie = Categorie::find($id);
         if (is_null($categorie)) {
-            return response()->json('Not found this categorie!', 404);
+            return response()->json(['status'=>false, 'msg'=>'This Categorie not found!']);
         }
         $categorie->delete();
-        return response()->json(null, 204);
+        return response()->json(['status'=>false, 'msg'=>'Deleted Successfuly!']);
     }
 }

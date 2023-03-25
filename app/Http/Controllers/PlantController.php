@@ -19,9 +19,10 @@ class PlantController extends Controller
     {
         $plant = Plant::all();
         if (is_null($plant)) {
-            return response()->json('Not found Any data!', 404);
+            return response()->json(['status'=>false, 'msg'=>'Not found Any data!']);
+        }else{
+            return response()->json(['status'=>true, 'data'=>$plant]);
         }
-        return response()->json($plant, 200);
     }
 
     /**
@@ -33,9 +34,13 @@ class PlantController extends Controller
     public function addCategories(CategoriePlantRequest $request, $id){
         // dd($plant);
         $plant = Plant::find($id);
-        $plant->categories()
-        ->syncWithoutDetaching($request->categorie_id);
-        return 'Created Multiple Categories';
+        if(is_null($plant)){
+            return response()->json(['status'=>false, 'msg'=>'This Plant Not Exist!']);
+        }else{
+            $plant->categories()
+            ->syncWithoutDetaching($request->categorie_id);
+            return response()->json(['status'=>true, 'msg'=>'Created Multiple Categories']);
+        }
     }
 
     /**
@@ -56,7 +61,7 @@ class PlantController extends Controller
         ]);
         $plant->categories()
         ->syncWithoutDetaching($request->categorie_id);
-        return response()->json('Created Success', 201);
+        return response()->json(['status'=>true, 'msg'=>'Created Success']);
     }
 
     // public function addCategorie(Request $request, Plant $plant)
@@ -73,7 +78,7 @@ class PlantController extends Controller
     public function show($id)
     {
         $plant = Plant::find($id);
-        return response()->json($plant->load('categories'), 200);
+        return response()->json(['status'=>true, 'data'=>$plant->load('categories')]);
     }
 
     /**
@@ -94,10 +99,11 @@ class PlantController extends Controller
     {
         $plant = Plant::find($id);
         if (is_null($plant)) {
-            return response()->json('Somthing not correct for this update plant please try again!', 404);
+            return response()->json(['status'=>false, 'msg'=>'This Plant Not Exist!']);        
+        }else{
+            $plant->update($request->all());
+            return response()->json(['status'=>true, 'data'=>$plant]);
         }
-        $plant->update($request->all());
-        return response()->json($plant, 200);
     }
 
     /**
@@ -110,9 +116,10 @@ class PlantController extends Controller
     {
         $plant = Plant::find($id);
         if (is_null($plant)) {
-            return response()->json('Not found this plant!', 404);
+            return response()->json(['status'=>false, 'msg'=>'This Plant Not Exist!']);        
+        }else{
+            $plant->delete();
+            return response()->json(['status'=>true, 'msg'=>'Deleted Successfuly']);
         }
-        $plant->delete();
-        return response()->json(null, 204);
     }
 }
