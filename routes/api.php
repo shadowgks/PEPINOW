@@ -1,8 +1,11 @@
 <?php
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Auth\Login as AuthLogin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Authentication\Login;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\PlantController;
 
@@ -22,8 +25,9 @@ use App\Http\Controllers\PlantController;
 // });
 
 //Authentification
+Route::post('/login', [AuthLogin::class , 'login']);
 Route::controller(AuthController::class)->group(function () {
-    Route::post('/login', 'login');
+    // Route::post('/login', 'login');
     Route::post('/register', 'register');
     Route::post('/logout', 'logout');
     Route::post('/refresh', 'refresh');
