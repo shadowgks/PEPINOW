@@ -7,15 +7,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Facades\Password;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
-
+    // Login
     public function login(Request $request)
     {
         $request->validate([
@@ -43,6 +43,7 @@ class AuthController extends Controller
         ]);
     }
 
+    // Register
     public function register(Request $request)
     {
         $request->validate([
@@ -69,15 +70,27 @@ class AuthController extends Controller
         ]);
     }
 
+    // Logout
     public function logout()
     {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            if (!$user) {
+                return  $this->returnError('E404', 'user_not_found!');
+            }
+        } catch (TokenExpiredException $e) {
+            return response()->json("token_expired");
+        } catch (TokenInvalidException $e) {
+            return response()->json("token_invalid!");
+        } catch (JWTException $e) {
+            return response()->json("token_absent!");
+        }
+
         Auth::logout();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Successfully logged out',
-        ]);
+        return response()->json("Logout has been success!");
     }
 
+    // Me
     public function me()
     {
         return response()->json([
@@ -86,6 +99,7 @@ class AuthController extends Controller
         ]);
     }
 
+    // Refresh
     public function refresh()
     {
         return response()->json([
@@ -98,6 +112,7 @@ class AuthController extends Controller
         ]);
     }
 
+    // forgotPassword
     public function forgotPassword(Request $request)
     {
         $validatedData =$request->validate([
@@ -111,6 +126,7 @@ class AuthController extends Controller
             : response()->json(['error' => 'Failed to send reset link'], 500);
     }
 
+    // resetPaswsword
     public function resetpassword(Request $request)
     {
         $request->validate([
@@ -131,5 +147,36 @@ class AuthController extends Controller
         return $response == Password::PASSWORD_RESET
             ? response()->json(['success' => true])
             : response()->json(['error' => 'Failed to reset password'], 500);
+    }
+
+    // updateProfile
+    public function updateProfilUser(Request $request){
+        $user = Auth::user();
+        if($user){
+            $request->validate([
+                // 'id' => $user->id,
+                'name' => 'required|min:2',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:8|confirmed'
+            ]);
+
+            $user->name = $request->name;
+            $user->password =  Hash::make($request->password);
+            $user->email = $request->email;
+            $user->save();
+
+            $data = [
+                'id' => $user->id,
+                'email' => $user->email,
+                'name' => $user->name,
+                'status' => 200,
+            ];
+
+            return response()->json(['Success'=>True,
+            'data' =>$data,
+            'msg'=>'Updated Profile Success']);
+        }else{
+            return response()->json(['Success'=>false, 'msg'=>'This User Not Authenticated']);
+        }
     }
 }

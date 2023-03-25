@@ -29,10 +29,6 @@ class PlantController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
 
     public function addCategories(CategoriePlantRequest $request, $id){
         // dd($plant);
@@ -58,13 +54,15 @@ class PlantController extends Controller
             'description' => $request->description,
             'user_id' => $id
         ]);
+        $plant->categories()
+        ->syncWithoutDetaching($request->categorie_id);
         return response()->json('Created Success', 201);
     }
 
-    public function addCategorie(Request $request, Plant $plant)
-    {
-        $plant->categories()->attach($request->categorie);
-    }
+    // public function addCategorie(Request $request, Plant $plant)
+    // {
+    //     $plant->categories()->attach($request->categorie);
+    // }
 
     /**
      * Display the specified resource.
@@ -75,12 +73,7 @@ class PlantController extends Controller
     public function show($id)
     {
         $plant = Plant::find($id);
-        return $plant->load('categories');
-        // $plate = Plant::find($id);
-        // if (is_null($plate)) {
-        //     return response()->json('Plant not found!', 404);
-        // }
-        // return response()->json($plate, 200);
+        return response()->json($plant->load('categories'), 200);
     }
 
     /**
@@ -89,10 +82,6 @@ class PlantController extends Controller
      * @param  \App\Models\Plant  $plant
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

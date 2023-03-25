@@ -30,6 +30,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/me', 'me');
     Route::post('/forgotPassword', 'forgotPassword');
     Route::post('/resetPassword', 'resetPassword')->name('password.reset');
+    Route::post('/updateProfilUser', 'updateProfilUser');
 });
 
 //Plant && Categorie

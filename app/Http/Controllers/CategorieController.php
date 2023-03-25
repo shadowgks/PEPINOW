@@ -26,10 +26,6 @@ class CategorieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -67,11 +63,6 @@ class CategorieController extends Controller
      * @param  \App\Models\Categorie  $categorie
      * @return \Illuminate\Http\Response
      */
-    public function edit(Categorie $categorie)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
