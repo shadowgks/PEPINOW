@@ -13,30 +13,15 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class Login extends Controller
+class RefreshController extends Controller
 {
-    public function login(Request $request)
+    public function refresh()
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-        $credentials = $request->only('email', 'password');
-
-        $token = auth('api')->attempt($credentials);
-        if (!$token) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 401);
-        }
-
-        $user = Auth::user();
         return response()->json([
             'status' => 'success',
-            'user' => $user,
+            'user' => Auth::user(),
             'authorisation' => [
-                'token' => $token,
+                'token' => Auth::refresh(),
                 'type' => 'bearer',
             ]
         ]);

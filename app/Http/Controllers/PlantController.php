@@ -52,22 +52,24 @@ class PlantController extends Controller
     public function store(PlantRequest $request)
     {
         $id = Auth::user()->id; //current user
+
+        //upload picture
+        $fileName = time().$request->picture->getClientOriginalName();
+        $path = $request->picture->storeAs('picture', $fileName, 'public');
+
         $plant = Plant::create([
             'name' => $request->name,
-            'picture' => $request->picture,
+            'picture' => '/storage/'.$path,
             'price' => $request->price,
             'description' => $request->description,
             'user_id' => $id
         ]);
+
+        //added many categories
         $plant->categories()
         ->syncWithoutDetaching($request->categorie_id);
         return response()->json(['status'=>true, 'msg'=>'Created Success']);
     }
-
-    // public function addCategorie(Request $request, Plant $plant)
-    // {
-    //     $plant->categories()->attach($request->categorie);
-    // }
 
     /**
      * Display the specified resource.

@@ -13,32 +13,33 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class UpdateProfile extends Controller
+class UpdateProfileController extends Controller
 {
-    public function updateProfilUser(Request $request){
+    public function updateProfilUser(Request $request)
+    {
         $user = Auth::user();
         if($user){
             $request->validate([
-                'name' => 'required|min:2',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|min:8|confirmed'
+                'name' => 'min:2',
+                'password' => 'min:8|confirmed',
+                'role' => 'integer'
             ]);
 
             $user->name = $request->name;
             $user->password =  Hash::make($request->password);
-            $user->email = $request->email;
+            $user->role = $request->role;
             $user->save();
 
             $data = [
                 'id' => $user->id,
                 'email' => $user->email,
                 'name' => $user->name,
-                'status' => 200,
+                'role' => $user->role,
             ];
 
             return response()->json(['Success'=>True,
             'data' =>$data,
-            'msg'=>'Updated Profile Success']);
+            'msg'=>'Updated Profile Successfuly']);
         }else{
             return response()->json(['Success'=>false, 'msg'=>'This User Not Authenticated']);
         }

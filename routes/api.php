@@ -1,14 +1,14 @@
 <?php
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Auth\ForgotPassword;
-use App\Http\Controllers\Auth\Login as AuthLogin;
-use App\Http\Controllers\Auth\Logout;
-use App\Http\Controllers\Auth\Profile;
-use App\Http\Controllers\Auth\Refresh;
-use App\Http\Controllers\Auth\Register;
-use App\Http\Controllers\Auth\ResetPassword;
-use App\Http\Controllers\Auth\UpdateProfile;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\Auth\RefreshController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\UpdateProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -32,14 +32,14 @@ use App\Http\Controllers\PlantController;
 // });
 
 //Authentification
-Route::post('/login', [AuthLogin::class , 'login']);
-Route::post('/register', [Register::class , 'register']);
-Route::post('/logout', [Logout::class , 'logout']);
-Route::post('/refresh', [Refresh::class , 'refresh']);
-Route::get('/me', [Profile::class , 'me']);
-Route::post('/forgotPassword', [ForgotPassword::class , 'forgotPassword']);
-Route::post('/resetPassword', [ResetPassword::class , 'resetPassword']);
-Route::post('/updateProfilUser', [UpdateProfile::class , 'updateProfilUser']);
+Route::post('/login', [LoginController::class , 'login']);
+Route::post('/register', [RegisterController::class , 'register']);
+Route::post('/logout', [LogoutController::class , 'logout']);
+Route::post('/refresh', [RefreshController::class , 'refresh']);
+Route::get('/me', [ProfileController::class , 'me']);
+Route::post('/forgotPassword', [ForgotPasswordController::class , 'forgotPassword']);
+Route::post('/resetPassword', [ResetPasswordController::class , 'resetPassword']);
+Route::patch('/updateProfilUser', [UpdateProfileController::class , 'updateProfilUser']);
 
 //Plant
 Route::apiResource('/plant',PlantController::class);

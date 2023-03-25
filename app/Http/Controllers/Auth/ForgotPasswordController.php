@@ -14,7 +14,7 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
-class ForgotPassword extends Controller
+class ForgotPasswordController extends Controller
 {
     public function forgotPassword(Request $request)
     {

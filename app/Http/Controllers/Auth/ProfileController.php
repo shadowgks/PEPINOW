@@ -13,7 +13,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class Profile extends Controller
+class ProfileController extends Controller
 {
     public function me()
     {

@@ -13,7 +13,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class ResetPassword extends Controller
+class ResetPasswordController extends Controller
 {
     public function resetpassword(Request $request)
     {
