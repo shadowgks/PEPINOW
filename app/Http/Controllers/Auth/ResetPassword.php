@@ -17,22 +17,19 @@ class ResetPassword extends Controller
 {
     public function resetpassword(Request $request)
     {
+        $user = $request->user();
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
+            'old_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
         ]);
 
-        $response = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user, string $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ]);
-                $user->save();
-            }
-        );
-        return $response == Password::PASSWORD_RESET
-            ? response()->json(['success' => true])
-            : response()->json(['error' => 'Failed to reset password'], 500);
+        if(Hash::check($request->old_password, $user->password)){
+            $user->update([
+                'password' => hash::make($request->new_password),
+            ]);
+            return response()->json(['statut'=>true, 'msg'=>'updated succesfuly']);
+        }else{
+            return response()->json(['statut'=>false, 'msg'=>'old password does not matched!']);
+        }
     }
 }

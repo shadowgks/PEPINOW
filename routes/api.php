@@ -1,7 +1,14 @@
 <?php
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Auth\ForgotPassword;
 use App\Http\Controllers\Auth\Login as AuthLogin;
+use App\Http\Controllers\Auth\Logout;
+use App\Http\Controllers\Auth\Profile;
+use App\Http\Controllers\Auth\Refresh;
+use App\Http\Controllers\Auth\Register;
+use App\Http\Controllers\Auth\ResetPassword;
+use App\Http\Controllers\Auth\UpdateProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -26,20 +33,18 @@ use App\Http\Controllers\PlantController;
 
 //Authentification
 Route::post('/login', [AuthLogin::class , 'login']);
-Route::controller(AuthController::class)->group(function () {
-    // Route::post('/login', 'login');
-    Route::post('/register', 'register');
-    Route::post('/logout', 'logout');
-    Route::post('/refresh', 'refresh');
-    Route::get('/me', 'me');
-    Route::post('/forgotPassword', 'forgotPassword');
-    Route::post('/resetPassword', 'resetPassword')->name('password.reset');
-    Route::post('/updateProfilUser', 'updateProfilUser');
-});
+Route::post('/register', [Register::class , 'register']);
+Route::post('/logout', [Logout::class , 'logout']);
+Route::post('/refresh', [Refresh::class , 'refresh']);
+Route::get('/me', [Profile::class , 'me']);
+Route::post('/forgotPassword', [ForgotPassword::class , 'forgotPassword']);
+Route::post('/resetPassword', [ResetPassword::class , 'resetPassword']);
+Route::post('/updateProfilUser', [UpdateProfile::class , 'updateProfilUser']);
 
-//Plant && Categorie
+//Plant
 Route::apiResource('/plant',PlantController::class);
 Route::post('/plant/{plant}', [PlantController::class, 'addCategories']);
 
+//Categorie
 Route::apiResource('/categorie',CategorieController::class);
 
