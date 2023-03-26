@@ -33,12 +33,12 @@ class PlantRequest extends FormRequest
     }
 
 
-    public function messages()
-    {
-        return [
-            'name.required' => 'you should provide name for plant',
-            'picture.required' => 'you should provide picture for plant',
-            'price.required' => 'you should provide price for plant'
-        ];
-    }
+    // public function messages()
+    // {
+    //     return [
+    //         'name.required' => 'you should provide name for plant',
+    //         'picture.required' => 'you should provide picture for plant',
+    //         'price.required' => 'you should provide price for plant'
+    //     ];
+    // }
 }

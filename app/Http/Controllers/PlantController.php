@@ -18,10 +18,11 @@ class PlantController extends Controller
     public function index()
     {
         $plant = Plant::all();
+        $plant->load('categories');
         if (is_null($plant)) {
-            return response()->json(['status'=>false, 'msg'=>'Not found Any data!']);
-        }else{
-            return response()->json(['status'=>true, 'data'=>$plant]);
+            return response()->json(['status' => false, 'msg' => 'Not found Any data!']);
+        } else {
+            return response()->json(['status' => true, 'data' => $plant]);
         }
     }
 
@@ -31,15 +32,16 @@ class PlantController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function addCategories(CategoriePlantRequest $request, $id){
+    public function addCategories(CategoriePlantRequest $request, $id)
+    {
         // dd($plant);
         $plant = Plant::find($id);
-        if(is_null($plant)){
-            return response()->json(['status'=>false, 'msg'=>'This Plant Not Exist!']);
-        }else{
+        if (is_null($plant)) {
+            return response()->json(['status' => false, 'msg' => 'This Plant Not Exist!']);
+        } else {
             $plant->categories()
-            ->syncWithoutDetaching($request->categorie_id);
-            return response()->json(['status'=>true, 'msg'=>'Created Multiple Categories']);
+                ->syncWithoutDetaching($request->categorie_id);
+            return response()->json(['status' => true, 'msg' => 'Created Multiple Categories']);
         }
     }
 
@@ -53,13 +55,15 @@ class PlantController extends Controller
     {
         $id = Auth::user()->id; //current user
 
-        //upload picture
-        $fileName = time().$request->picture->getClientOriginalName();
+        //----------B Upload pictures--------------
+        $fileName = time() . $request->picture->getClientOriginalName();
         $path = $request->picture->storeAs('picture', $fileName, 'public');
+        //----------E Upload pictures--------------
 
+        //store data
         $plant = Plant::create([
             'name' => $request->name,
-            'picture' => '/storage/'.$path,
+            'picture' => '/storage/' . $path,
             'price' => $request->price,
             'description' => $request->description,
             'user_id' => $id
@@ -67,8 +71,8 @@ class PlantController extends Controller
 
         //added many categories
         $plant->categories()
-        ->syncWithoutDetaching($request->categorie_id);
-        return response()->json(['status'=>true, 'msg'=>'Created Success']);
+            ->syncWithoutDetaching($request->categorie_id);
+        return response()->json(['status' => true, 'msg' => 'Created Success']);
     }
 
     /**
@@ -80,7 +84,7 @@ class PlantController extends Controller
     public function show($id)
     {
         $plant = Plant::find($id);
-        return response()->json(['status'=>true, 'data'=>$plant->load('categories')]);
+        return response()->json(['status' => true, 'data' => $plant->load('categories')]);
     }
 
     /**
@@ -101,10 +105,21 @@ class PlantController extends Controller
     {
         $plant = Plant::find($id);
         if (is_null($plant)) {
-            return response()->json(['status'=>false, 'msg'=>'This Plant Not Exist!']);        
-        }else{
-            $plant->update($request->all());
-            return response()->json(['status'=>true, 'data'=>$plant]);
+            return response()->json(['status' => false, 'msg' => 'This Plant Not Exist!']);
+        } else {
+            $inputs = $request->all();
+            $picture = $request->picture;
+            //----------B Upload pictures--------------
+            if ($picture) {
+                $fileName = time() . $picture->getClientOriginalName();
+                $path = $picture->storeAs('images', $fileName, 'public');
+                $inputs["picture"] = 'storage/' . $path;
+            } else {
+                unset($inputs["picture"]);
+            }
+            //----------E Upload pictures--------------
+            $plant->update($inputs);
+            return response()->json(['status' => true, 'data' => $plant]);
         }
     }
 
@@ -118,10 +133,10 @@ class PlantController extends Controller
     {
         $plant = Plant::find($id);
         if (is_null($plant)) {
-            return response()->json(['status'=>false, 'msg'=>'This Plant Not Exist!']);        
-        }else{
+            return response()->json(['status' => false, 'msg' => 'This Plant Not Exist!']);
+        } else {
             $plant->delete();
-            return response()->json(['status'=>true, 'msg'=>'Deleted Successfuly']);
+            return response()->json(['status' => true, 'msg' => 'Deleted Successfuly']);
         }
     }
 }

@@ -11,14 +11,13 @@ use Illuminate\Support\Facades\Password;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LogoutController extends Controller
 {
     public function logout()
     {
         try {
-            $user = JWTAuth::parseToken()->authenticate();
+            $user = Auth::user();
             if (!$user) {
                 return  $this->returnError('E404', 'user_not_found!');
             }

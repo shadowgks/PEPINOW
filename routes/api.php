@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -32,19 +33,33 @@ use App\Http\Controllers\PlantController;
 // });
 
 //Authentification
-Route::post('/login', [LoginController::class , 'login']);
-Route::post('/register', [RegisterController::class , 'register']);
-Route::post('/logout', [LogoutController::class , 'logout']);
-Route::post('/refresh', [RefreshController::class , 'refresh']);
-Route::get('/me', [ProfileController::class , 'me']);
-Route::post('/forgotPassword', [ForgotPasswordController::class , 'forgotPassword']);
-Route::post('/resetPassword', [ResetPasswordController::class , 'resetPassword']);
-Route::patch('/updateProfilUser', [UpdateProfileController::class , 'updateProfilUser']);
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/logout', [LogoutController::class, 'logout']);
+Route::post('/refresh', [RefreshController::class, 'refresh']);
+Route::post('/forgotPassword', [ForgotPasswordController::class, 'forgotPassword']);
+Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
+Route::patch('/updateProfilUser', [UpdateProfileController::class, 'updateProfilUser']);
+Route::get('/me', [ProfileController::class, 'me']);
 
-//Plant
-Route::apiResource('/plant',PlantController::class);
-Route::post('/plant/{plant}', [PlantController::class, 'addCategories']);
 
-//Categorie
-Route::apiResource('/categorie',CategorieController::class);
 
+//PRIVETE
+// Admin
+Route::group(['middleware' => ['admin']], function () {
+    //Categorie
+    Route::apiResource('/categorie', CategorieController::class);
+});
+
+// Vendeur
+Route::group(['middleware' => ['vendeur']], function () {
+    //Plant
+    Route::apiResource('/plant', PlantController::class);
+    Route::post('/plant/{plant}', [PlantController::class, 'addCategories']);
+});
+
+//Utilisateur
+Route::group(['middleware' => ['utilisateur']], function () {
+    //Plant
+    Route::apiResource('/plant', PlantController::class)->only('index');
+});
