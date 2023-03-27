@@ -18,12 +18,16 @@ class PlantController extends Controller
      */
     public function index()
     {
-        $plant = Plant::all();
-        $plant->load('categories');
-        if (is_null($plant)) {
-            return response()->json(['status' => false, 'msg' => 'Not found Any data!']);
-        } else {
-            return response()->json(['status' => true, 'data' => $plant]);
+
+        $plant = Plant::all()->where('user_id',Auth::user()->id);
+        dd($plant);
+        if($plant->user_id == Auth::user()->id){
+            $plant->load('categories');
+            if (is_null($plant)) {
+                return response()->json(['status' => false, 'msg' => 'Not found Any data!']);
+            } else {
+                return response()->json(['status' => true, 'data' => $plant]);
+            }
         }
     }
 
