@@ -22,12 +22,10 @@ class UpdateProfileController extends Controller
             $request->validate([
                 'name' => 'min:2',
                 'password' => 'min:8|confirmed',
-                'role' => 'integer'
             ]);
 
             $user->name = $request->name;
             $user->password =  Hash::make($request->password);
-            $user->role = $request->role;
             $user->save();
 
             $data = [

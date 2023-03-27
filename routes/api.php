@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\RefreshController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UpdateProfileController;
+use App\Http\Controllers\Auth\UpdateRoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -50,6 +51,8 @@ Route::get('/me', [ProfileController::class, 'me']);
 Route::group(['middleware' => ['admin']], function () {
     //Categorie
     Route::apiResource('/categorie', CategorieController::class);
+    //changer roles
+    Route::patch('/updateRoleUser/{id}', [UpdateRoleController::class, 'updateRoleUser']);
 });
 
 // Vendeur
