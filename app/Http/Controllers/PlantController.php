@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoriePlantRequest;
 use App\Http\Requests\PlantRequest;
+use App\Models\Categorie;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Plant;
 use Illuminate\Http\Request;
@@ -119,7 +120,7 @@ class PlantController extends Controller
             }
             //----------E Upload pictures--------------
             $plant->update($inputs);
-            return response()->json(['status' => true, 'data' => $plant]);
+            return response()->json(['status' => true, 'msg' => 'updated success', 'data' => $plant]);
         }
     }
 
@@ -137,6 +138,17 @@ class PlantController extends Controller
         } else {
             $plant->delete();
             return response()->json(['status' => true, 'msg' => 'Deleted Successfuly']);
+        }
+    }
+
+    public function filterByCategory($id)
+    {
+        $plant = Categorie::find($id);
+        $plant->load('plants');
+        if (is_null($plant)) {
+            return response()->json(['status' => false, 'msg' => 'Not found Any data!']);
+        } else {
+            return response()->json(['status' => true, 'data' => $plant]);
         }
     }
 }

@@ -44,6 +44,9 @@ Route::post('/resetForgotPassword', [ResetPasswordController::class, 'resetPassw
 Route::patch('/updateProfilUser', [UpdateProfileController::class, 'updateProfilUser']);
 Route::get('/me', [ProfileController::class, 'me']);
 
+//filter by categorie
+Route::post('/filter-by-categorie/{id}', [PlantController::class, 'filterByCategory']);
+
 
 
 //PRIVETE
@@ -59,7 +62,7 @@ Route::group(['middleware' => ['admin']], function () {
 Route::group(['middleware' => ['vendeur']], function () {
     //Plant
     Route::apiResource('/plant', PlantController::class);
-    Route::post('/plant/{plant}', [PlantController::class, 'addCategories']);
+    Route::post('/plant-categorie/{plant}', [PlantController::class, 'addCategories']);
 });
 
 //Utilisateur
