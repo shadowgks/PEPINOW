@@ -37,8 +37,9 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/logout', [LogoutController::class, 'logout']);
 Route::post('/refresh', [RefreshController::class, 'refresh']);
-Route::post('/forgotPassword', [ForgotPasswordController::class, 'forgotPassword']);
 Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
+Route::post('/forgotPassword', [ForgotPasswordController::class, 'forgotPassword']);
+Route::post('/resetForgotPassword', [ResetPasswordController::class, 'resetPassword'])->name('password.reset');
 Route::patch('/updateProfilUser', [UpdateProfileController::class, 'updateProfilUser']);
 Route::get('/me', [ProfileController::class, 'me']);
 
